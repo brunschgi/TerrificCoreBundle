@@ -12,6 +12,7 @@
 namespace Terrific\CoreBundle\Filter;
 
 use Assetic\Asset\AssetInterface;
+use Assetic\Filter\FilterInterface;
 
 /**
  * Filters assets through JsMin.
