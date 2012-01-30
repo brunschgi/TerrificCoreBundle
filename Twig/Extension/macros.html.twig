@@ -12,7 +12,7 @@ class="mod {# specific mod#}{{ 'mod' ~ name }}{# end specific mod #}{# skins #}{
 
 {# connectors #}
 {% if connectors|length > 0 %}
-data-connectors="{% for connector in connectors %}{% if loop.index == 1 %}{{ 'conn' ~ connector }}{% else %}{{ ' conn' ~ connector }}{% endif %}{% endfor %}"
+data-connectors="{% for connector in connectors %}{% if loop.index == 1 %}{{ connector }}{% else %}{{ ' conn' ~ connector }}{% endif %}{% endfor %}"
 {% endif %}
 
 {# additional attrs (exception class attribute) #}
