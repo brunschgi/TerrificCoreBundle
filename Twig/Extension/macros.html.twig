@@ -28,9 +28,9 @@ data-composer-template="{{ view }}"
 
 {# include / render the appropriate module view #}
 {% if view is containing(':') %}
-    {% render 'TerrificModule' ~ name ~ 'Bundle:' ~ view with data %}
+    {% render 'TerrificModule' ~ name ~ ':' ~ view with data %}
 {% else %}
-    {% include 'TerrificModule' ~ name ~ 'Bundle::' ~ (view | lower) ~ '.html.twig' %}
+    {% include 'TerrificModule' ~ name ~ '::' ~ (view | lower) ~ '.html.twig' %}
 {% endif %}
 {# end include #}
 
