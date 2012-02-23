@@ -22,7 +22,8 @@
     {% endblock %}
     {% block styles %}
         {% stylesheets
-            '../src/Terrific/Module/*/Resources/public/css/*'
+            '../src/Terrific/Module/*/Resources/public/css/*.*'
+            '../src/Terrific/Module/*/Resources/public/css/skin/*.*'
             output="css/compiled/base.css"
         %}
             <link rel="stylesheet" href="{{ asset_url }}" />
@@ -55,7 +56,8 @@
     {% endblock %}
     {% block scripts %}
         {% javascripts
-            '../src/Terrific/Module/*/Resources/public/js/*'
+            '../src/Terrific/Module/*/Resources/public/js/*.js'
+            '../src/Terrific/Module/*/Resources/public/js/skin/*.js'
             output='js/compiled/base.js'
         %}
             <script src="{{ asset_url }}" type="text/javascript"></script>
