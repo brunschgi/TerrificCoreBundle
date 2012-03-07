@@ -12,74 +12,74 @@
     {% endblock %}
     {# stylesheets #}
     {% block css_reset %}
-        {% stylesheets
-            '@TerrificCoreBundle/Resources/public/css/cssreset-min.css'
+    {% stylesheets
+            'bundles/terrificcore/css/cssreset-min.css'
             output="css/compiled/reset.css"
         %}
-            <link rel="stylesheet" href="{{ asset_url }}" />
-        {% endstylesheets %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
     {% endblock %}
     {% block css_default %}
-        {# for general css files (ie. css resets) #}
+    {# for general css files (ie. css resets) #}
     {% endblock %}
     {% block styles %}
-        {% stylesheets
-            '../src/Terrific/Module/*/Resources/public/css/*.*'
-            '../src/Terrific/Module/*/Resources/public/css/skin/*.*'
+    {% stylesheets
+            'bundles/terrificmodule*/css/*.*'
+            'bundles/terrificmodule*/css/skin/*.*'
+            filter="cssrewrite"
             output="css/compiled/base.css"
         %}
-            <link rel="stylesheet" href="{{ asset_url }}" />
-        {% endstylesheets %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
     {% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
-    {# the content goes here #}
+{# the content goes here #}
     {% block composition %}{% endblock %}
 
-    {# javascripts #}
+{# javascripts #}
     {% block jquery %}
-        {% javascripts
-            '@TerrificCoreBundle/Resources/public/js/jquery-1.7.1.min.js'
+{% javascripts
+            'bundles/terrificcore/js/jquery-1.7.1.min.js'
             output='js/compiled/jquery-1.7.1.min.js'
         %}
-            <script src="{{ asset_url }}" type="text/javascript"></script>
-        {% endjavascripts %}
-    {% endblock %}
-    {% block terrificjs %}
-        {% javascripts
-            '@TerrificCoreBundle/Resources/public/js/terrific-1.0.0.min.js'
+<script src="{{ asset_url }}" type="text/javascript"></script>
+{% endjavascripts %}
+{% endblock %}
+{% block terrificjs %}
+{% javascripts
+            'bundles/terrificcore/js/terrific-1.0.0.min.js'
             output='js/compiled/terrific-1.0.0.min.js'
         %}
-            <script src="{{ asset_url }}" type="text/javascript"></script>
-        {% endjavascripts %}
+<script src="{{ asset_url }}" type="text/javascript"></script>
+{% endjavascripts %}
+{% endblock %}
+{% block js_default %}
+{# for general js files (ie. plugins that are needed on every page) #}
     {% endblock %}
-    {% block js_default %}
-        {# for general js files (ie. plugins that are needed on every page) #}
-    {% endblock %}
-    {% block scripts %}
-        {% javascripts
-            '../src/Terrific/Module/*/Resources/public/js/*.js'
-            '../src/Terrific/Module/*/Resources/public/js/skin/*.js'
+{% block scripts %}
+{% javascripts
+            'bundles/terrificmodule*/js/*.js'
+            'bundles/terrificmodule*/js/skin/*.js'
             output='js/compiled/base.js'
         %}
-            <script src="{{ asset_url }}" type="text/javascript"></script>
-        {% endjavascripts %}
-    {% endblock %}
+<script src="{{ asset_url }}" type="text/javascript"></script>
+{% endjavascripts %}
+{% endblock %}
 
-    {# terrificjs bootstrap #}
+{# terrificjs bootstrap #}
     {% block bootstrap %}
-        <script type="text/javascript">
-            (function($) {
-                $(document).ready(function() {
-                    var $page = $('body'),
-                        application = new Tc.Application();
+<script type="text/javascript">
+    (function($) {
+        $(document).ready(function() {
+            var $page = $('body'),
+                    application = new Tc.Application();
 
-                    application.registerModules($page);
-                    application.start();
-                });
-            })(Tc.$);
-        </script>
-    {% endblock %}
+            application.registerModules($page);
+            application.start();
+        });
+    })(Tc.$);
+</script>
+{% endblock %}
 </body>
 </html>
-
