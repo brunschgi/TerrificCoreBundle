@@ -4,10 +4,19 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <parameters>
+        <parameter key="terrific_core.listener.class">Terrific\CoreBundle\EventListener\CoreListener</parameter>
+    </parameters>
+
     <services>
         <service id="twig.extension.terrific.core"
                  class="Terrific\CoreBundle\Twig\Extension\TerrificCoreExtension" public="true">
             <tag name="twig.extension"/>
+        </service>
+
+        <service id="terrific_core" class="%terrific_core.listener.class%">
+            <tag name="kernel.event_listener" event="kernel.response" method="onKernelResponse" priority="-128" />
+            <argument type="service" id="kernel" />
         </service>
     </services>
 </container>
