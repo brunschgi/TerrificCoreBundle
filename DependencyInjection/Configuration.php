@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Terrific Core package.
+ * This file is part of the Terrific Core Bundle.
  *
  * (c) Remo Brunschwiler <remo@terrifically.org>
  *
@@ -29,9 +29,11 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('terrific_core');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+            ->booleanNode('copy_images')->defaultFalse()->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }

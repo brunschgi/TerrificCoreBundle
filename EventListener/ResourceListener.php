@@ -19,7 +19,7 @@ use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Component\Finder\Finder;
 
 /**
- * CoreListener deployes all Terrific resources (composition and modules) automatically.
+ * ResourceListener deployes all Terrific module img resources automatically.
  *
  * The onKernelResponse method must be connected to the kernel.response event.
  *
@@ -27,36 +27,39 @@ use Symfony\Component\Finder\Finder;
  *
  * @author Remo Brunschwiler <remo@terrifically.org>
  */
-class CoreListener
+class ResourceListener
 {
     private $kernel;
+    private $copyImages;
 
     /**
      * Constructor.
      *
-     * @param KernelInterface       $kernel       The kernel is used to parse bundle notation
+     * @param KernelInterface $kernel The kernel is used to get the root dir
      */
-    public function __construct(KernelInterface $kernel)
+    public function __construct(KernelInterface $kernel, $copyImages)
     {
         $this->kernel = $kernel;
+        $this->copyImages = $copyImages;
     }
 
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
-            return;
-        }
+        // prevent copying completely if config is set
+        if($this->copyImages) {
 
-        $request = $event->getRequest();
+            if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
+                return;
+            }
 
-        // do not capture redirects or modify XML HTTP Requests
-        if ($request->isXmlHttpRequest()) {
-            return;
-        }
+            $request = $event->getRequest();
 
-        $baseUrl = $this->kernel->getRootDir();
+            // do not capture redirects or modify XML HTTP Requests
+            if ($request->isXmlHttpRequest()) {
+                return;
+            }
 
-        if (in_array($this->kernel->getEnvironment(), array('dev'))) {
+            $baseUrl = $this->kernel->getRootDir();
 
             // update terrific resources
             $dir = $baseUrl.'/../src/Terrific/Module/';
@@ -64,16 +67,16 @@ class CoreListener
             $finder = new Finder();
             $finder->directories()->in($dir)->depth('== 0');
 
-            // deploy composition resources
             @mkdir($baseUrl.'/../web/bundles');
-            // $this->recursiveDelete($baseUrl.'/../web/bundles/terrificcomposition');
-            $this->recursiveCopy($baseUrl.'/../src/Terrific/Composition/Resources/public', $baseUrl.'/../web/bundles/terrificcomposition');
 
             foreach ($finder as $file) {
-                // deploy module resources
-                // $this->recursiveDelete($baseUrl.'/../web/bundles/terrificmodule'.strtolower($file->getFilename()));
-                $this->recursiveCopy($file->getRealpath().'/Resources/public', $baseUrl.'/../web/bundles/terrificmodule'.strtolower($file->getFilename()));
+                // deploy module images
+                if(file_exists($file->getRealpath().'/Resources/public/img')) {
+                    @mkdir($baseUrl.'/../web/bundles/terrificmodule'.strtolower($file->getFilename()));
+                    $this->recursiveCopy($file->getRealpath().'/Resources/public/img', $baseUrl.'/../web/bundles/terrificmodule'.strtolower($file->getFilename()).'/img');
+                }
             }
+
         }
     }
 

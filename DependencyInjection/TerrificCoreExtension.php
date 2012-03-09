@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Terrific Core package.
+ * This file is part of the Terrific Core Bundle.
  *
  * (c) Remo Brunschwiler <remo@terrifically.org>
  *
@@ -33,5 +33,7 @@ class TerrificCoreExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
+
+        $container->setParameter('terrific_core.resources.copyimages', $config['copy_images']);
     }
 }

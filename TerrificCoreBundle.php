@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Terrific Core package.
+ * This file is part of the Terrific Core Bundle.
  *
  * (c) Remo Brunschwiler <remo@terrifically.org>
  *
