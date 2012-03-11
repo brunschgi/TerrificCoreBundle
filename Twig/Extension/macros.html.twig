@@ -2,7 +2,7 @@
 
 {# validate params #}
 {% set name = (name) | default('Default') %}
-{% set view = (view) | default(name) %}
+{% set view = (view) | default(name | lower) %}
 {% set skins = skins | default([]) %}
 {% set connectors = connectors | default([]) %}
 {% set attrs = attrs | default({}) %}
