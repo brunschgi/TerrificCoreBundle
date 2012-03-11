@@ -11,7 +11,6 @@
     <services>
         <service id="assetic.filter.terrificrewrite" class="%assetic.filter.terrificrewrite.class%">
             <tag name="assetic.filter" alias="terrificrewrite" />
-            <call method="setContainer"><argument type="service" id="service_container" /></call>
         </service>
     </services>
 </container>

@@ -23,16 +23,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class TerrificRewriteFilter extends BaseCssFilter
 {
-    private $container;
-
     public function filterLoad(AssetInterface $asset)
     {
     }
 
     public function filterDump(AssetInterface $asset)
     {
-        $basePath = $this->container->get('request')->getBasePath();
-        $sourceBase = $asset->getSourceRoot();
         $sourcePath = $asset->getSourcePath();
         $targetPath = $asset->getTargetPath();
 
@@ -40,20 +36,39 @@ class TerrificRewriteFilter extends BaseCssFilter
             return;
         }
 
+        // pop entries off the target until it fits in the source
+        if ('.' == dirname($sourcePath)) {
+            $path = str_repeat('../', substr_count($targetPath, '/'));
+        } elseif ('.' == $targetDir = dirname($targetPath)) {
+            $path = dirname($sourcePath).'/';
+        } else {
+            $path = '';
+            while (0 !== strpos($sourcePath, $targetDir)) {
+                if (false !== $pos = strrpos($targetDir, '/')) {
+                    $targetDir = substr($targetDir, 0, $pos);
+                    $path .= '../';
+                } else {
+                    $targetDir = '';
+                    $path .= '..';
+                    break;
+                }
+            }
+        }
+
         $module = str_replace('../src/Terrific/Module/', '', $asset->getSourcePath());
         $parts = explode('/', $module);
         $module = 'terrificmodule'.strtolower($parts[0]);
 
-        $content = $this->filterReferences($asset->getContent(), function($matches) use($basePath, $module)
+        $content = $this->filterReferences($asset->getContent(), function($matches) use($path, $module)
         {
             if ('/' == $matches['url'][0]) {
                 // root relative
-                return str_replace($matches['url'], $basePath.$matches['url'], $matches[0]);
+                return str_replace($matches['url'], $path.$matches['url'], $matches[0]);
             }
             else if(strpos($matches['url'], '../') === 0) {
                 // relative to module
-                $image = str_replace('../', '', $matches['url']);
-                return str_replace($matches['url'], $basePath.'/bundles/'.$module.'/'.$image, $matches[0]);
+                $image = basename($matches['url']);
+                return str_replace($matches['url'], $path.'/bundles/'.$module.'/img/'.$image, $matches[0]);
             }
             else {
                 // do noting
@@ -64,8 +79,24 @@ class TerrificRewriteFilter extends BaseCssFilter
         $asset->setContent($content);
     }
 
-    public function setContainer(ContainerInterface $container) {
-        $this->container = $container;
-    }
+    private function getBasePath()
+    {
+        $filename = basename($_SERVER['SCRIPT_FILENAME']);
+        $baseUrl = $this->getBaseUrl();
+        if (empty($baseUrl)) {
+            return '';
+        }
 
+        if (basename($baseUrl) === $filename) {
+            $basePath = dirname($baseUrl);
+        } else {
+            $basePath = $baseUrl;
+        }
+
+        if ('\\' === DIRECTORY_SEPARATOR) {
+            $basePath = str_replace('\\', '/', $basePath);
+        }
+
+        return rtrim($basePath, '/');
+    }
 }
