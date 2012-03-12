@@ -71,8 +71,8 @@ class TerrificRewriteFilter extends BaseCssFilter
                 return str_replace($matches['url'], $path.'/bundles/'.$module.'/img/'.$image, $matches[0]);
             }
             else {
-                // do noting
-                // return $matches['url'];
+                // do nothing
+                return $matches['url'];
             }
         });
 
