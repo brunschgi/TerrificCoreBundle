@@ -72,7 +72,7 @@ class TerrificRewriteFilter extends BaseCssFilter
             }
             else {
                 // do noting
-                return $matches['url'];
+                // return $matches['url'];
             }
         });
 
