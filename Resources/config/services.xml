@@ -12,6 +12,7 @@
         <service id="twig.extension.terrific.core"
                  class="Terrific\CoreBundle\Twig\Extension\TerrificCoreExtension" public="true">
             <tag name="twig.extension"/>
+            <argument type="service" id="kernel" />
         </service>
 
         <service id="terrific_core.resources" class="%terrific_core.resources.class%">

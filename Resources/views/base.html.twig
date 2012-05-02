@@ -3,25 +3,10 @@
 <html>
 <head>
     <title>{% block title %}Terrific Composer{% endblock %}</title>
-    <meta name="description"
-          content="{% block meta_description %}Modularize your code, scale down your problems{% endblock %}"/>
-    <meta name="keywords" content="{% block meta_keywords %}Terrific Composer, TerrificJS{% endblock %}"/>
-    <meta name="generator" content="Terrific Composer"/>
     <meta charset="UTF-8"/>
-    {% block meta_others %}
+    {% block meta %}
     {% endblock %}
     {# stylesheets #}
-    {% block css_reset %}
-        {% stylesheets
-            '@TerrificCoreBundle/Resources/public/css/cssreset-min.css'
-            output="css/compiled/reset.css"
-        %}
-            <link rel="stylesheet" href="{{ asset_url }}" />
-        {% endstylesheets %}
-    {% endblock %}
-    {% block css_default %}
-        {# for general css files (ie. css resets) #}
-    {% endblock %}
     {% block styles %}
         {% stylesheets
             '../src/Terrific/Module/*/Resources/public/css/*.*'
@@ -53,9 +38,6 @@
         %}
             <script src="{{ asset_url }}" type="text/javascript"></script>
         {% endjavascripts %}
-    {% endblock %}
-    {% block js_default %}
-        {# for general js files (ie. plugins that are needed on every page) #}
     {% endblock %}
     {% block scripts %}
         {% javascripts

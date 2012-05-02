@@ -36,6 +36,7 @@ class ResourceListener
      * Constructor.
      *
      * @param KernelInterface $kernel The kernel is used to get the root dir
+     * @param boolean $copyImages flag that indicates whether to copy the images on every request
      */
     public function __construct(KernelInterface $kernel, $copyImages)
     {
