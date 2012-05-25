@@ -44,17 +44,19 @@ class TerrificCoreExtension extends \Twig_Extension
         $environment->addGlobal('tc', $environment->loadTemplate('terrificcore.html.twig'));
 
         // load the composition macros
-        $finder = new Finder();
-        $finder->files()->in($dir)->depth('== 0');
+        if(file_exists($dir)) {
+            $finder = new Finder();
+            $finder->files()->in($dir)->depth('== 0');
 
-        foreach ($finder as $file) {
-           $filename = $file->getFilename();
+            foreach ($finder as $file) {
+               $filename = $file->getFilename();
 
-           if(strpos($filename, 'html') !== false) {
-                $parts = explode('.', $file->getFilename());
-                $macro = $parts[0];
-                $environment->addGlobal($macro, $environment->loadTemplate($file->getFilename()));
-           }
+               if(strpos($filename, 'html') !== false) {
+                    $parts = explode('.', $file->getFilename());
+                    $macro = $parts[0];
+                    $environment->addGlobal($macro, $environment->loadTemplate($file->getFilename()));
+               }
+            }
         }
     }
 
