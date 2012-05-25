@@ -13,6 +13,7 @@ namespace Terrific\CoreBundle\Twig\Extension;
 
 use Symfony\Component\HttpKernel\KernelInterface;
 use Twig_Test_Method;
+use Twig_Filter_Method;
 use Symfony\Component\Finder\Finder;
 
 class TerrificCoreExtension extends \Twig_Extension
@@ -60,17 +61,32 @@ class TerrificCoreExtension extends \Twig_Extension
     /**
      * {@inheritdoc}
      */
-    public function getTests()
+    public function getFilters()
     {
         return array(
-            'containing' => new Twig_Test_Method($this, 'twigTestContaining')
+            'dash' => new Twig_Filter_Method($this, 'dash'),
         );
     }
 
-    function twigTestContaining($value, $needle)
+    public static function dash($value) {
+        return strtolower(preg_replace(array('/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'), array('\\1-\\2', '\\1-\\2'), strtr($value, '-', '.')));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTests()
+    {
+        return array(
+            'containing' => new Twig_Test_Method($this, 'containing')
+        );
+    }
+
+    public static function containing($value, $needle)
     {
         return strpos($value, $needle) !== false;
     }
+
 
 
     /**

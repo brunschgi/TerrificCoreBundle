@@ -25,16 +25,16 @@
     {# javascripts #}
     {% block jquery %}
         {% javascripts
-            '@TerrificCoreBundle/Resources/public/js/jquery-1.7.1.min.js'
-            output='js/compiled/jquery-1.7.1.min.js'
+            '@TerrificCoreBundle/Resources/public/js/jquery-1.7.2.min.js'
+            output='js/compiled/jquery-1.7.2.min.js'
         %}
             <script src="{{ asset_url }}" type="text/javascript"></script>
         {% endjavascripts %}
     {% endblock %}
     {% block terrificjs %}
         {% javascripts
-            '@TerrificCoreBundle/Resources/public/js/terrific-1.0.0.min.js'
-            output='js/compiled/terrific-1.0.0.min.js'
+            '@TerrificCoreBundle/Resources/public/js/terrific-2.0.0.min.js'
+            output='js/compiled/terrific-2.0.0.min.js'
         %}
             <script src="{{ asset_url }}" type="text/javascript"></script>
         {% endjavascripts %}
