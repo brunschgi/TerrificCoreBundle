@@ -120,7 +120,7 @@ For a full list of available blocks, please have a look at @TerrificCoreBundle::
 
 Every [Terrific Module](http://terrifically.org) is a separate bundle. The module macro makes it easy to mix and match them
 on your page. It works similar as the built-in twig helpers `include` and `render` and wraps your included / embedded module templates
-in the appropriate module <div>, eg. <div class="mod mod-news" data-connectors="update">... your template ...</div>.
+in the appropriate module `<div>`, eg. <div class="mod mod-news" data-connectors="update">... your template ...</div>`.
 
 *Including Module Templates*
 
