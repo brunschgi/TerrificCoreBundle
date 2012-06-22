@@ -27,12 +27,10 @@ Register the bundle in `app/AppKernel.php`:
         );
     }
 
-Enable the bundle's configuration in `app/config/config_dev.yml`:
+
+Enable the new terrificrewrite filter in `app/config/config.yml`:
 
     # app/config/config_dev.yml
-    terrific_core:
-        copy_images: true # copy your module images on the fly without running `assets:install web`
-
     # extend assetic filter configuration (rewrite of the backround image path in your terrific modules)
     assetic:
         …
@@ -42,16 +40,11 @@ Enable the bundle's configuration in `app/config/config_dev.yml`:
                 resource: %kernel.root_dir%/../vendor/bundles/Terrific/CoreBundle/Resources/config/terrificrewrite.xml
 
 
-    # app/config/config_prod.yml
-    # extend assetic filter configuration (support for php only js minification without node or java)
-    assetic:
-        …
-        filters:
-        …
-            jsmin:
-                apply_to: "\.js"
-                file:   %kernel.root_dir%/../vendor/jsmin/JSMin.php
-                resource: %kernel.root_dir%/../vendor/bundles/Terrific/CoreBundle/Resources/config/jsmin.xml
+Enable the bundle's configuration in `app/config/config_dev.yml`:
+
+    # app/config/config_dev.yml
+    terrific_core:
+        copy_images: true # copy your module images on the fly without running `assets:install web`
 
 
 ## Usage
