@@ -7,7 +7,8 @@
 {% set connectors = connectors | default([]) %}
 {% set attrs = attrs | default({}) %}
 {% set data = data | default({}) %}
-<div
+
+<{{attrs.tag|default('div')}}
 class="mod {# specific mod#}{{ 'mod-' ~ (name | dash) }}{# end specific mod #}{# skins #}{% for skin in skins %}{{ ' skin-' ~ (name | dash) ~ '-' ~ (skin | dash) }}{% endfor %}{# end skins #}{# additional class(es) #}{% if attrs.class is defined %}{{ ' ' ~ attrs.class }}{% endif %}{# end additional class(es) #}"
 
 {# connectors #}
@@ -34,5 +35,5 @@ data-composer-template="{{ view }}"
 {% endif %}
 {# end include #}
 
-</div>
+</{{attrs.tag|default('div')}}>
 {% endmacro %}
