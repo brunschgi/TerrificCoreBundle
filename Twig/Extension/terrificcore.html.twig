@@ -1,3 +1,13 @@
+{#
+    Renders terrific modules.
+
+    @param name {String} name of the module
+    @param view {String} name of the view to render (without html.twig suffix) [optional]
+    @param skins {Array} contains the skins to apply [optional]
+    @param connectors {Array} contains the channel ids to connect to [optional]
+    @param attrs {Object} contains the additional html attributes for the module [optional]
+    @param data {Object} contains the data to pass to embedded controllers [optional]
+#}
 {% macro module(name, view, skins, connectors, attrs, data) %}
 
 {# validate params #}
