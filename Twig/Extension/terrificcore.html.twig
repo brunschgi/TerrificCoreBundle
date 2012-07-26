@@ -18,8 +18,8 @@ data-connectors="{% for connector in connectors %}{% if loop.index == 1 %}{{ con
 
 {# additional attrs (exception class attribute) #}
 {% for attr, value in attrs %}
-    {% if attr != 'class '%}
-    {{ (attr ~ '="' ~ value ~ '"') | raw }}
+    {% if attr != 'class' and attr != 'tag' %}
+	    {{ (attr ~ '="' ~ value ~ '"') | raw }}
     {% endif %}
 {% endfor %}
 
