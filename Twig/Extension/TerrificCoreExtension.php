@@ -18,13 +18,11 @@ use Symfony\Component\Finder\Finder;
 
 class TerrificCoreExtension extends \Twig_Extension
 {
+    /**
+     * @var \Symfony\Component\HttpKernel\KernelInterface
+     */
     private $kernel;
 
-    /**
-     * Constructor.
-     *
-     * @param KernelInterface $kernel The kernel is used to get the root dir
-     */
     public function __construct(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
