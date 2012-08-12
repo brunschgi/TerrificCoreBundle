@@ -5,7 +5,7 @@
  * Copyright 2012, Remo Brunschwiler
  * MIT Licensed.
  *
- * Date: Fri, 15 Jun 2012 09:36:20 GMT
+ * Date: Fri, 25 May 2012 12:32:36 GMT
  *
  *
  * Includes:
@@ -23,10 +23,11 @@ var Tc = Tc || {};
  */
 Tc.$ = jQuery;
 
-/*
+/**
  * Simple JavaScript Inheritance
  * By John Resig http://ejohn.org/
  * MIT Licensed.
+ *
  */
 (function(){
     var initializing = false, fnTest = /xyz/.test(function() { xyz; }) ? /\b_super\b/ : /.*/;
@@ -92,8 +93,8 @@ Tc.$ = jQuery;
 /**
  * Contains the application base config.
  * The base config can be extended or overwritten either via
- * new Application ($ctx, config) during bootstrapping the application or via
- * overriding the Tc.Config object in your project.
+ * new Application ($ctx, config), during bootstrapping the application or via 
+ * /public/js/Tc.Config.js in the project folder.
  *
  * @author Remo Brunschwiler
  * @namespace Tc
@@ -117,7 +118,7 @@ Tc.Config = {
     "use strict";
 
     /**
-     * Responsible for application-wide issues such as the creation of modules and establishing connections between them.
+     * Responsible for application-wide issues such as the creation of modules.
      *
      * @author Remo Brunschwiler
      * @namespace Tc
@@ -129,9 +130,10 @@ Tc.Config = {
          * Initializes the application.
          *
          * @method init
+         * @return {void}
          * @constructor
          * @param {jQuery} $ctx 
-         *      The jQuery context
+         *      The jquery context
          * @param {Object} config 
          *      The configuration
          */
@@ -187,12 +189,12 @@ Tc.Config = {
          *
          * @method registerModules
          * @param {jQuery} $ctx 
-         *      The jQuery context
+         *      The jQuery context.
          * @return {Array} 
-         *      A list containing the references of the registered modules
+         *      A list containing the references of the registered modules.
          */
         registerModules : function($ctx) {
-            var self = this,
+            var that = this,
                 modules = [],
                 stringUtils = Tc.Utils.String;
 
@@ -202,38 +204,28 @@ Tc.Config = {
                 var $this = $(this),
                     classes = $this.attr('class').split(' ');
 
-                /*
-                 * A module can have several different classes and data attributes.
-                 * See below for possible values.
-                 */
-
-                /*
-                 * @config .mod
-                 *
+                /**
                  * Indicates that it is a base module, this is the default and
                  * no JavaScript needs to be involved. It must occur excactly
                  * once.
+                 * @config .mod 
                  */
 
-                /*
-                 * @config .mod{moduleName} || .mod-{module-name}
-                 *
+                /**
                  * Indicates that it is a module of type basic, which is
                  * derived from the base module. It can occur at most
                  * once. Example: .modBasic || .mod-basic
+                 * @config .mod{moduleName} || .mod-{module-name}
                  */
 
-                /*
-                 * @config .skin{moduleName}{skinName} || .skin-{module-name}-{skin-name}
-                 *
+                /**
                  * Indicates that the module basic has the submarine skin. It
                  * will be decorated by the skin JS (if it exists). It can occur
                  * arbitrarily. Example: .skinBasicSubmarine || .skin-basic-submarine
+                 * @config .skin{moduleName}{skinName} || .skin-{module-name}-{skin-name}
                  */
 
-                /*
-                 * @config data-connectors
-                 *
+                /** 
                  * A module can have a comma-separated list of data connectors.
                  * The list contains the IDs of the connectors in the following
                  * schema: {connectorType}-{connectorId}
@@ -247,6 +239,8 @@ Tc.Config = {
                  * The connector id is used to chain the appropriate (the ones with the same id)
                  * modules together and to improve the reusability of the connector.
                  * It can contain multiple connector ids (e.g. 1,2,MasterSlave-Navigation).
+                 *
+                 * @config data-connectors
                  */
 
                 if (classes.length > 1) {
@@ -275,7 +269,7 @@ Tc.Config = {
                         }
                     }
 
-                    /*
+                    /**
                      * This needs to be done via attr() instead of data().
                      * As data() cast a single number-only connector to an integer, the split will fail.
                      */
@@ -293,7 +287,7 @@ Tc.Config = {
                     }
 
                     if (modName && Tc.Module[modName]) {
-                        modules.push(self.registerModule($this, modName, skins, connectors));
+                        modules.push(that.registerModule($this, modName, skins, connectors));
                     }
                 }
             });
@@ -307,6 +301,7 @@ Tc.Config = {
          * @method unregisterModule
          * @param {Array} modules 
          *      A list containting the module instances to unregister
+         * @return {void}
          */
         unregisterModules : function(modules) {
             var connectors = this.connectors;
@@ -346,6 +341,7 @@ Tc.Config = {
          * @method start
          * @param {Array} modules 
          *      A list of the modules to start
+         * @return {void}
          */
         start: function(modules) {
             modules = modules || this.modules;
@@ -361,7 +357,8 @@ Tc.Config = {
          *
          * @method stop
          * @param {Array} modules 
-         *      A list containting the module instances to stop
+         *      A list containting the module instances to stop.
+         * @return {void}
          */
         stop: function(modules) {
             modules = modules || this.modules;
@@ -377,21 +374,23 @@ Tc.Config = {
          *
          * @method registerModule
          * @param {jQuery} $node 
-         *      The module node
+         *      The module node.
          * @param {String} modName 
          *      The module name. It must match the class name of the module
+         *      (case sensitive).
          * @param {Array} skins 
-         *      A list of skin names. Each entry must match a class name of a skin
+         *      A list of skin names. Each entry must match a class name of a
+         *      skin (case sensitive).
          * @param {Array} connectors 
-         *      A list of connectors identifiers (e.g. MasterSlave-Navigation)
-         *      Schema: {connectorName}-{connectorId}
+         *      A list of connectors identifiers (e.g. MasterSlave1Master).
+         *      Schema: {connectorName}{connectorId}{connectorRole}
          * @return {Module} 
-         *      The reference to the registered module
+         *      The reference to the registered module.
          */
         registerModule : function($node, modName, skins, connectors) {
             var modules = this.modules;
 
-            modName = modName || undefined;
+            modName = modName || null;
             skins = skins || [];
             connectors = connectors || [];
 
@@ -400,10 +399,8 @@ Tc.Config = {
                 var id = modules.length;
                 $.data($node[0], 'id', id);
 
-                // Instantiate module
                 modules[id] = new Tc.Module[modName]($node, this.sandbox, id);
 
-                // Decorate it
                 for (var i = 0, len = skins.length; i < len; i++) {
                     var skinName = skins[i];
 
@@ -412,7 +409,6 @@ Tc.Config = {
                     }
                 }
 
-                // Register connections
                 for (var i = 0, len = connectors.length; i < len; i++) {
                     this.registerConnection(connectors[i], modules[id]);
                 }
@@ -428,9 +424,10 @@ Tc.Config = {
          *
          * @method registerConnection
          * @param {String} connector 
-         *      The full connector name (e.g. MasterSlave-Navigation)
+         *      The full connector name (e.g. MasterSlave1Slave).
          * @param {Module} component 
-         *      The module instance
+         *      The module instance.
+         * @return {void}
          */
         registerConnection : function(connector, component) {
             connector = $.trim(connector);
@@ -465,13 +462,13 @@ Tc.Config = {
                 }
 
                 if (connectors[identifier]) {
-                    /*
+                    /**
                      * The connector observes the component and attaches it as
                      * an observer.
                      */
                     component.attachConnector(connectors[identifier]);
 
-                    /*
+                    /**
                      * The component wants to be informed over state changes.
                      * It registers it as connector member.
                      */
@@ -484,10 +481,11 @@ Tc.Config = {
          * Unregisters a module from a connector.
          *
          * @method unregisterConnection
-         * @param {String} connectorId 
-         *      The connector channel id (e.g. 2)
-         * @param {Module} component 
-         *      The module instance
+         * @param {String} connectorId
+         *      The connector channel id (e.g. 2).
+         * @param {Module} component
+         *      The module instance.
+         * @return {void}
          */
         unregisterConnection : function(connectorId, component) {
             var connector =  this.connectors[connectorId];
@@ -518,6 +516,7 @@ Tc.Config = {
          * Initializes the Sandbox.
          *
          * @method init
+         * @return {void}
          * @constructor
          * @param {Applicaton} application 
          *      The application reference
@@ -556,9 +555,9 @@ Tc.Config = {
          *
          * @method addModules
          * @param {jQuery} $ctx 
-         *      The jQuery context
+         *      The jQuery context.
          * @return {Array} 
-         *      A list containing the references of the registered modules
+         *      A list containing the references of the registered modules.
          */
         addModules: function($ctx) {
             var modules = [],
@@ -581,7 +580,8 @@ Tc.Config = {
          *
          * @method removeModules
          * @param {Array} modules 
-         *      A list containting the module instances to remove
+         *      A list containting the module instances to remove.
+         * @return {void}
          */
         removeModules: function(modules) {
             var application = this.application;
@@ -599,8 +599,11 @@ Tc.Config = {
          * Subscribes a module to a connector.
          *
          * @method subscribe
-         * @param {String} connector The full connector name (e.g. MasterSlave-Navigation)
-         * @param {Module} module The module instance
+         * @param {String} connector
+         *      The full connector name (e.g. MasterSlave1Slave).
+         * @param {Module} module
+         *      The module instance.
+         * @return {void}
          */
         subscribe: function(connector, module) {
             var application = this.application;
@@ -616,8 +619,11 @@ Tc.Config = {
          * Unsubscribes a module from a connector.
          *
          * @method unsubscribe
-         * @param {String} connectorId The connector channel id (e.g. 2 or Navigation)
-         * @param {Module} module The module instance
+         * @param {String} connectorId
+         *      The connector channel id (e.g. 2).
+         * @param {Module} module
+         *      The module instance.
+         * @return {void}
          */
         unsubscribe: function(connectorId, module) {
             var application = this.application;
@@ -688,6 +694,7 @@ Tc.Config = {
          * @method ready
          * @param {Function} callback 
          *      The 'after' hook module callback
+         * @return {void}
          */
         ready: function(callback) {
             var afterCallbacks = this.afterCallbacks;
@@ -700,7 +707,7 @@ Tc.Config = {
                 for (var i = 0; i < afterCallbacks.length; i++) {
                     var afterCallback = afterCallbacks[i];
 
-                    if(typeof afterCallback === "function") {
+                    if(typeof afterCallback == "function") {
                         // make sure the callback is only executed once (and is not called during addModules)
                         delete afterCallbacks[i];
                         afterCallback();
@@ -727,12 +734,13 @@ Tc.Config = {
          * Initializes the Module.
          *
          * @method init
+         * @return {void}
          * @constructor
          * @param {jQuery} $ctx 
-         *      The jQuery context 
+         *      The jQuery context
          * @param {Sandbox} sandbox 
          *      The sandbox to get the resources from
-         * @param {String} id 
+         * @param {String} id
          *      The Unique module ID
          */
         init: function($ctx, sandbox, id) {
@@ -775,14 +783,15 @@ Tc.Config = {
          * by the individual instance.
          *
          * @method start
+         * @return {void}
          */
         start: function() {
-            var self = this;
+            var that = this;
 
             // Call the hook method from the individual instance and provide the appropriate callback
             if (this.on) {
                 this.on(function() {
-                    self.initAfter();
+                    that.initAfter();
                 });
             }
         },
@@ -791,6 +800,7 @@ Tc.Config = {
          * Template method to stop the module.
          *
          * @method stop
+         * @return {void}
          */
         stop: function() {
             var $ctx = this.$ctx;
@@ -805,17 +815,17 @@ Tc.Config = {
          * Initialization callback.
          *
          * @method initAfter
-         * @protected
+         * @return {void}
          */
         initAfter: function() {
-            var self = this;
+            var that = this;
 
             this.sandbox.ready(function() {
-                /*
-                 * Call the 'after' hook method from the individual instance
+                /**
+                 * Call the 'after' hook method  from the individual instance
                  */
-                if (self.after) {
-                    self.after();
+                if (that.after) {
+                    that.after();
                 }
             });
         },
@@ -824,71 +834,41 @@ Tc.Config = {
          * Notifies all attached connectors about changes.
          *
          * @method fire
-         * @param {String} state The new state
-         * @param {Object} data The data to provide to your connected modules (optional)
-         * @param {Array} channels  A list containting the channel ids to send the event to (optional)
-         * @param {Function} defaultAction The default action to perform (optinal)
+         * @param {String} state 
+         *      The new state
+         * @param {Object} data 
+         *      The data to provide to your connected modules
+         * @param {Function} defaultAction 
+         *      The default action to perform
+         * @return {void}
          */
-        fire: function(state, data, channels, defaultAction) {
-            var self = this,
-                connectors = this.connectors,
-                called = false; // makes sure the default handler is only called once
+        fire: function(state, data, defaultAction) {
+            var that = this,
+                connectors = this.connectors;
 
-            // validate params
-            if(channels == null && defaultAction == null) {
-                // Max. 2 params
-                if (typeof data === 'function') {
-                    // (state, defaultAction)
-                    defaultAction = data;
-                    data = undefined;
-                }
-                else if ($.isArray(data)) {
-                    // (state, channels)
-                    channels = data;
-                    data = undefined;
-                }
-            }
-            else if(defaultAction == null) {
-                // 2-3 params
-                if (typeof channels === 'function') {
-                    // (state, data, defaultAction)
-                    defaultAction = channels;
-                    channels = undefined;
-                }
-
-                if ($.isArray(data)) {
-                    // (state, channels, defaultAction)
-                    channels = data;
-                    data = undefined;
-                }
-            }
-           
+            data = data ||{};
             state = Tc.Utils.String.capitalize(state);
-            data = data || {};
-            channels = channels || Object.keys(connectors);
-            
-            for (var i = 0, len = channels.length; i < len; i++) {
-                var connectorId = channels[i];
-                if(connectors.hasOwnProperty(connectorId)) {
-                    var connector = connectors[connectorId],
-                        proceed = connector.notify(self, 'on' + state, data) || false;
 
-                    if (proceed) {
-                        // Make sure the default action is only called once (and not for every channel)
-                        if (typeof defaultAction === 'function' && !called) {
-                            called = true;
+            for (var connectorId in connectors) {
+                if(connectors.hasOwnProperty(connectorId)) {
+                    var connector = connectors[connectorId];
+
+                    // Callback combining the defaultAction and the afterAction
+                    var callback = function() {
+                        if (typeof defaultAction == 'function') {
                             defaultAction();
                         }
-                        connector.notify(self, 'after' + state, data);
+                        connector.notify(that, 'after' + state, data);
+                    };
+
+                    if (connector.notify(that, 'on' + state, data, callback)) {
+                        callback();
                     }
-                } else {
-                    throw new Error('the module #' + self.id + ' is not connected to connector ' + connectorId);
                 }
             }
 
-            // Execute default action in any cases
-            if (!called) {
-                if (typeof defaultAction === 'function') {
+            if ($.isEmptyObject(connectors)) {
+                if (typeof defaultAction == 'function') {
                     defaultAction();
                 }
             }
@@ -900,6 +880,7 @@ Tc.Config = {
          * @method attachConnector
          * @param {Connector} connector 
          *      The connector to attach
+         * @return {void}
          */
         attachConnector: function(connector) {
             this.connectors[connector.connectorId] = connector;
@@ -909,7 +890,9 @@ Tc.Config = {
          * Detaches a connector (observer).
          *
          * @method detachConnector
-         * @param {Connector} connector The connector to detach
+         * @param {Connector} connector
+         *      The connector to detach
+         * @return {void}
          */
         detachConnector: function(connector) {
             delete this.connectors[connector.connectorId];
@@ -919,9 +902,12 @@ Tc.Config = {
          * Decorates itself with the given skin.
          *
          * @method getDecoratedModule
-         * @param {String} module The name of the module
-         * @param {String} skin The name of the skin
-         * @return {Module} The decorated module
+         * @param {String} module 
+         *      The name of the module
+         * @param {String} skin 
+         *      The name of the skin
+         * @return {Module} 
+         *      The decorated module
          */
         getDecoratedModule: function(module, skin) {
             if (Tc.Module[module][skin]) {
@@ -959,6 +945,7 @@ Tc.Config = {
          * Initializes the Connector.
          *
          * @method init
+         * @return {void}
          * @constructor
          * @param {String} connectorId
          *      The unique connector ID
@@ -974,6 +961,7 @@ Tc.Config = {
          * @method registerComponent
          * @param {Module} component 
          *      The module to register
+         * @return {void}
          */
         registerComponent: function(component) {
             this.components[component.id] = {
@@ -987,6 +975,7 @@ Tc.Config = {
          * @method unregisterComponent
          * @param {Module} component 
          *      The module to unregister
+         * @return {void}
          */
         unregisterComponent: function(component) {
             var components = this.components;
@@ -1007,11 +996,14 @@ Tc.Config = {
          *      The component's state
          * @param {Object} data 
          *      Contains the state relevant data (if any)
-         * @return {boolean}
+         * @param {Function} callback 
+         *      The callback function, it can be executed after an asynchronous
+         *      action.
+         * @return {boolean} 
          *      Indicates whether the default action should be excuted or not
          */
         notify: function(origin, state, data, callback) {
-            /*
+            /**
              * Gives the components the ability to prevent the default- and
              * after action from the events by returning false in the
              * on {Event}-Handler.
@@ -1023,7 +1015,7 @@ Tc.Config = {
                 if(components.hasOwnProperty(id)) {
                     var component = components[id].component;
                     if (component !== origin && component[state]) {
-                        if (component[state](data) === false) {
+                        if (component[state](data, callback) === false) {
                             proceed = false;
                         }
                     }
@@ -1040,24 +1032,12 @@ Tc.Config = {
  */
 Tc.Utils = {};
 
-// Helper
-if (!Object.keys) {
-    Object.keys = function (obj) {
-        var keys = [], k;
-        for (k in obj) {
-            if (Object.prototype.hasOwnProperty.call(obj, k)) {
-                keys.push(k);
-            }
-        }
-        return keys;
-    };
-}
 /**
  * Contains utility functions for string concerning tasks.
  *
  * @author Remo Brunschwiler
- * @namespace Tc
- * @class Utils.String
+ * @namespace Tc.Utils
+ * @class String
  * @static
  */
 (function($) {
@@ -1066,9 +1046,9 @@ if (!Object.keys) {
          * Capitalizes the first letter of the given string.
          *
          * @method capitalize
-         * @param {String} str 
+         * @param {String} str
          *      The original string
-         * @return {String} 
+         * @return {String}
          *      The capitalized string
          */
         capitalize: function(str) {
@@ -1076,15 +1056,6 @@ if (!Object.keys) {
             return str.substr(0, 1).toUpperCase().concat(str.substr(1));
         },
 
-        /**
-         * Camelizes the given string.
-         *
-         * @method toCamel
-         * @param {String} str 
-         *      The original string
-         * @return {String} 
-         *      The camelized string
-         */
         toCamel: function(str){
             return str.replace(/(\-[A-Za-z])/g, function($1){return $1.toUpperCase().replace('-','');});
         }

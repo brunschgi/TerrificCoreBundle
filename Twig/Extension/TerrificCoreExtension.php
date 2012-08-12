@@ -18,13 +18,11 @@ use Symfony\Component\Finder\Finder;
 
 class TerrificCoreExtension extends \Twig_Extension
 {
+    /**
+     * @var \Symfony\Component\HttpKernel\KernelInterface
+     */
     private $kernel;
 
-    /**
-     * Constructor.
-     *
-     * @param KernelInterface $kernel The kernel is used to get the root dir
-     */
     public function __construct(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
@@ -54,7 +52,7 @@ class TerrificCoreExtension extends \Twig_Extension
     }
 
     public static function dash($value) {
-        return strtolower(preg_replace(array('/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'), array('\\1-\\2', '\\1-\\2'), strtr($value, '-', '.')));
+        return strtolower(preg_replace(array('/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'), array('\\1-\\2', '\\1-\\2'), $value));
     }
 
     /**
