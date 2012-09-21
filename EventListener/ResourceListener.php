@@ -73,9 +73,18 @@ class ResourceListener
 
             foreach ($finder as $file) {
                 // deploy module images
-                if(file_exists($file->getRealpath().'/Resources/public/img')) {
-                    @mkdir($baseUrl.'/../web/bundles/terrificmodule'.strtolower($file->getFilename()));
-                    $this->recursiveCopy($file->getRealpath().'/Resources/public/img', $baseUrl.'/../web/bundles/terrificmodule'.strtolower($file->getFilename()).'/img');
+                $source = $file->getRealpath().'/Resources/public/img';
+
+                if(file_exists($source)) {
+                    $moduleDir = $baseUrl.'/../web/bundles/terrificmodule'.strtolower($file->getFilename());
+                    @mkdir($moduleDir);
+
+                    if(is_writeable($moduleDir)) {
+                        $this->recursiveCopy($source, $baseUrl.'/../web/bundles/terrificmodule'.strtolower($file->getFilename()).'/img');
+                    }
+                    else {
+                        throw new \RuntimeException('Unable to write module directory '.$moduleDir);
+                    }
                 }
             }
 
@@ -85,31 +94,25 @@ class ResourceListener
     private function recursiveCopy($src,$dst) {
         $dir = opendir($src);
         @mkdir($dst);
-        while(false !== ( $file = readdir($dir)) ) {
-            if (( $file != '.' ) && ( $file != '..' ) && ( strpos($file, '.') !== 0)) {
-                if ( is_dir($src . '/' . $file) ) {
-                    $this->recursiveCopy($src . '/' . $file,$dst . '/' . $file);
-                }
-                else {
-                    copy($src . '/' . $file, $dst . '/' . $file);
-                }
-            }
-        }
-        closedir($dir);
-    }
 
-    private function recursiveDelete($target) {
-        $dir = opendir($target);
-        while(false !== ( $file = readdir($dir)) ) {
-            if (( $file != '.' ) && ( $file != '..' )) {
-                if ( is_dir($target . '/' . $file) ) {
-                    $this->recursiveDelete($target . '/' . $file);
-                }
-                else {
-                    unlink($target . '/' . $file);
+        if(is_writeable($dst)) {
+            while(false !== ( $file = readdir($dir)) ) {
+                if (( $file != '.' ) && ( $file != '..' ) && ( strpos($file, '.') !== 0)) {
+                    if ( is_dir($src . '/' . $file) ) {
+                        $this->recursiveCopy($src . '/' . $file,$dst . '/' . $file);
+                    }
+                    else {
+                        // only copy modified images
+                        if(!file_exists($dst . '/' . $file) || filemtime($src . '/' . $file) > filemtime ($dst . '/' . $file))  {
+                            copy($src . '/' . $file, $dst . '/' . $file);
+                        }
+                    }
                 }
             }
+            closedir($dir);
         }
-        rmdir($target);
+        else {
+            throw new \RuntimeException('Unable to write image directory '.$dst);
+        }
     }
 }
