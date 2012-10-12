@@ -1,0 +1,31 @@
+{
+    "name": "brunschgi/terrific-core-bundle",
+    "description": "Enables development of frontends based on the terrific concept",
+    "keywords": ["frontend", "terrific"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Remo Brunschwiler",
+            "homepage": "http://terrifically.org"
+        },
+        {
+            "name": "Terrific Symfony Community",
+            "homepage": "https://github.com/brunschgi/TerrificCoreBundle/contributors"
+        }
+    ],
+    "require": {
+        "symfony/framework-bundle": "2.1.*"
+    },
+    "require-dev": {
+        "symfony/console": "2.1.*",
+        "symfony/yaml": "2.1.*",
+        "symfony/finder": "2.1.*",
+        "symfony/filesystem": "2.1.*",
+        "twig/twig": "1.10.x-dev"
+    },
+    "autoload": {
+        "psr-0": { "Terrific\\CoreBundle": "" }
+    },
+    "target-dir": "Terrific/CoreBundle"
+}
