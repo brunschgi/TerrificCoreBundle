@@ -1,1 +1,6 @@
 .idea
+.DS_Store
+/Resources/material
+/development/
+/vendor/
+composer.phar
