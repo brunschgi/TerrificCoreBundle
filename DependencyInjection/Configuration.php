@@ -32,6 +32,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
             ->booleanNode('copy_images')->defaultFalse()->end()
+            ->booleanNode('ignore_base_assets')->defaultFalse()->end()
             ->end()
         ;
 
