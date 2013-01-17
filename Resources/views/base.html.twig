@@ -18,7 +18,7 @@
         {% endstylesheets %}
     {% endblock %}
 </head>
-<body class="{% block body_class %}{% endblock %}">
+<body{% if body_class is defined %} class="{% block body_class %}{% endblock %}"{% endif %}>
     {# the content goes here #}
     {% block composition %}{% endblock %}
 
