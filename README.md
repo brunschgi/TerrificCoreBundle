@@ -44,7 +44,7 @@ Enable the new terrificrewrite filter in `app/config/config.yml`:
         filters:
             …
             terrificrewrite:
-                resource: %kernel.root_dir%/../vendor/bundles/Terrific/CoreBundle/Resources/config/terrificrewrite.xml
+                resource: %kernel.root_dir%/../vendor/brunschgi/terrific-core-bundle/Terrific/CoreBundle/Resources/config/terrificrewrite.xml
 
 
 Enable the bundle's configuration in `app/config/config_dev.yml`:
