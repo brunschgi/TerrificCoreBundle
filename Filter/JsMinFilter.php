@@ -69,6 +69,6 @@ class JsMinFilter implements FilterInterface
             }
         }
 
-        $asset->setContent(\JsMin::minify($asset->getContent(), $filters, $plugins));
+        $asset->setContent(\JsMin\Minify::minify($asset->getContent(), $filters, $plugins));
     }
 }
