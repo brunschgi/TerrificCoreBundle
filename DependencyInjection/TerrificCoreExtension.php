@@ -31,9 +31,10 @@ class TerrificCoreExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
 
         $container->setParameter('terrific_core.resources.copyimages', $config['copy_images']);
+        $container->setParameter('terrific_core.resources.ignore_base_assets', $config['ignore_base_assets']);
     }
 }
