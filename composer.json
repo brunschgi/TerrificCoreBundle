@@ -15,13 +15,13 @@
         }
     ],
     "require": {
-        "symfony/framework-bundle": "2.2.*"
+        "symfony/framework-bundle": ">=2.1"
     },
     "require-dev": {
-        "symfony/console": "2.2.*",
-        "symfony/yaml": "2.2.*",
-        "symfony/finder": "2.2.*",
-        "symfony/filesystem": "2.2.*",
+        "symfony/console": ">=2.1",
+        "symfony/yaml": ">=2.1",
+        "symfony/finder": ">=2.1",
+        "symfony/filesystem": ">=2.1",
         "twig/twig": "1.12.x-dev"
     },
     "autoload": {
