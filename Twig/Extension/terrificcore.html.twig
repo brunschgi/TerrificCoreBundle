@@ -39,7 +39,7 @@ data-composer-template="{{ view }}"
 
 {# include / render the appropriate module view #}
 {% if view is containing(':') %}
-    {% render 'TerrificModule' ~ name ~ ':' ~ view with data %}
+    {% render 'TerrificModule' ~ name ~ ':' ~ view, data %}
 {% else %}
     {% include 'TerrificModule' ~ name ~ '::' ~ view ~ '.html.twig' with data %}
 {% endif %}
